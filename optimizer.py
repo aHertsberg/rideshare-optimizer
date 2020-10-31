@@ -69,4 +69,14 @@ class OptimizationGraph():
         return locations
 
 
-           
+          
+class Passenger():
+    def __init__(self, start_location_id):
+        self.start_location = start_location_id
+        self.location = start_location_id
+
+    def get_start(self):
+        return self.start_location
+
+    def get_location(self):
+        return self.location
