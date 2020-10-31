@@ -8,15 +8,15 @@ class Locations():
         self.destination = None
         
     def add_location(self, location_id, latitude, longitude):
-        self.locations[location_id] = [latitude, longitude, 0]
+        self.locations[location_id] = [latitude, longitude, []]
 
-    def add_person(self, location_id, amount=1):
-        self.locations[location_id][2] += amount
+    def add_passenger(self, passenger):
+        self.locations[passenger.get_location()][2].append(passenger)
 
     def get_locations(self):
         return list(self.locations)
 
-    def get_persons(self, location_id):
+    def get_passengers(self, location_id):
         return self.locations[location_id][2]
 
     def get_coordinates(self, location_id):
@@ -69,4 +69,18 @@ class OptimizationGraph():
         return locations
 
 
-           
+          
+class Passenger():
+    def __init__(self, passenger_id, start_location_id):
+        self.passenger_id = passenger_id
+        self.start_location = start_location_id
+        self.location = start_location_id
+
+    def get_id(self):
+        return self.passenger_id
+
+    def get_start(self):
+        return self.start_location
+
+    def get_location(self):
+        return self.location
