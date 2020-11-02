@@ -84,3 +84,29 @@ class Passenger():
 
     def get_location(self):
         return self.location
+
+class Car():
+    def __init__(self, car_id, start_location_id):
+        self.car_id = car_id
+        self.location_ids = [start_location_id]
+        self.passengers = []
+
+    def get_car_id(self):
+        return self.car_id
+
+    def get_location(self):
+        return self.location_ids[-1]
+
+    def set_location(self, location_id):
+        self.location_ids.append(location_id)
+        return
+
+    def get_route(self):
+        return self.location_ids
+
+    def get_passengers(self):
+        return self.passengers
+
+    def add_passengers(self, passenger):
+        self.passengers.append(passenger)
+        return
