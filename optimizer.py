@@ -1,11 +1,8 @@
-
-
-
-class Locations():
+class Locations:
     def __init__(self):
         self.locations = {}
         self.destination = None
-        
+
     def add_location(self, location_id, latitude, longitude):
         self.locations[location_id] = [latitude, longitude]
 
@@ -27,14 +24,14 @@ class Locations():
 
     def get_destination_id(self):
         return self.destination
-        
 
-class OptimizationGraph():
+
+class OptimizationGraph:
     def __init__(self, locations):
         self.locations = locations
         self.edges = {}
         self.populate_edges()
-    
+
     def update_locations(self, locations):
         self.locations = locations
         self.populate_edges()
@@ -60,8 +57,8 @@ class OptimizationGraph():
     def get_locations(self):
         return locations
 
-          
-class Passenger():
+
+class Passenger:
     def __init__(self, passenger_id, start_location_id):
         self.passenger_id = passenger_id
         self.start_location = start_location_id
@@ -87,7 +84,7 @@ class Passenger():
         self.in_car = True
 
 
-class Car():
+class Car:
     def __init__(self, car_id, start_location_id):
         self.car_id = car_id
         self.location_ids = [start_location_id]
