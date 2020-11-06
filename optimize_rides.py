@@ -27,7 +27,7 @@ for index in car_file.index:
     car = optimizer.Car(car_file["car_id"][index], car_file["location_id"][index])
     cars.append(car)
 
-print(graph.get_edges())
+print(graph.get_edges(cars, passengers))
 print(locations.get_destination_coordinates())
 
 locations.set_destination(4)

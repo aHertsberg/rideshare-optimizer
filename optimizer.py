@@ -41,7 +41,7 @@ class OptimizationGraph:
             for end in self.locations.get_locations():
                 if start != end:
                     distance = self.calculate_distances(start, end)
-                    self.edges[f"{start},{end}"] = distance
+                    self.edges[(start,end)] = distance
 
     def calculate_distances(self, start, end):
         # TODO implement google API querying
@@ -51,8 +51,23 @@ class OptimizationGraph:
         else:
             return 5
 
-    def get_edges(self):
-        return self.edges
+    def get_edges(self, cars, passengers):
+        relevant_location_ids = []
+        for car in cars:
+            location = car.get_location()
+            if not location in relevant_location_ids:
+                relevant_location_ids.append(location)
+
+        for passenger in passengers:
+            location = passenger.get_location()
+            if not location in relevant_location_ids:
+                relevant_location_ids.append(location)
+
+        edges = {}
+        for key in self.edges.keys():
+            if key[0] in relevant_location_ids and key[1] in relevant_location_ids:
+                edges[key] = self.edges[key]
+        return edges
 
     def get_locations(self):
         return locations
