@@ -3,8 +3,9 @@ class Locations:
         self.locations = {}
         self.destination = None
 
-    def add_location(self, location_id, latitude, longitude):
-        self.locations[location_id] = [latitude, longitude]
+    def add_location(self, location_id, latitude, longitude, visited=False):
+        self.locations[location_id] = [latitude, longitude, visited]
+        return
 
     def get_locations(self):
         return list(self.locations)
@@ -14,6 +15,7 @@ class Locations:
 
     def set_destination(self, location_id):
         self.destination = location_id
+        return
 
     def get_destination_coordinates(self):
         try:
@@ -35,6 +37,7 @@ class OptimizationGraph:
     def update_locations(self, locations):
         self.locations = locations
         self.populate_edges()
+        return
 
     def populate_edges(self):
         for start in self.locations.get_locations():
@@ -45,27 +48,30 @@ class OptimizationGraph:
 
     def calculate_distances(self, start, end):
         # TODO implement google API querying
-
+        # for now, a very crude distance generator:
         if start < end:
             return 4
         else:
             return 5
 
     def get_edges(self, cars, passengers):
-        relevant_location_ids = []
-        for car in cars:
+        destination = self.locations.get_destination_id()
+        car_locations = []
+        for car_id in cars.keys():
+            car = cars[car_id]
             location = car.get_location()
-            if not location in relevant_location_ids:
-                relevant_location_ids.append(location)
+            if not location in car_locations:
+                car_locations.append(location)
 
+        to_visit = [destination,]
         for passenger in passengers:
             location = passenger.get_location()
-            if not location in relevant_location_ids:
-                relevant_location_ids.append(location)
+            if not location in to_visit and not passenger.is_in_car():
+                to_visit.append(location)
 
         edges = {}
         for key in self.edges.keys():
-            if key[0] in relevant_location_ids and key[1] in relevant_location_ids:
+            if key[0] in car_locations and key[1] in to_visit:
                 edges[key] = self.edges[key]
         return edges
 
@@ -79,6 +85,7 @@ class Passenger:
         self.start_location = start_location_id
         self.location = start_location_id
         self.in_car = False
+        self.arrived = False
 
     def get_id(self):
         return self.passenger_id
@@ -91,13 +98,21 @@ class Passenger:
 
     def set_location(self, location_id):
         self.location = location_id
+        return
 
     def is_in_car(self):
         return self.in_car
 
     def pick_up(self):
         self.in_car = True
+        return
 
+    def has_arrived(self):
+        return self.at_destination
+
+    def set_arrived(self, state: bool):
+        self.arrived = state
+        return
 
 class Car:
     def __init__(self, car_id, start_location_id):
@@ -121,10 +136,21 @@ class Car:
     def get_passengers(self):
         return self.passengers
 
-    def add_passengers(self, passenger):
+    def add_passenger(self, passenger):
         passenger.pick_up()
         self.passengers.append(passenger)
         return
-
+    # for potential future limitations
     def get_weight(self):
         return 1 + len(self.passengers)
+
+
+
+
+
+
+
+
+
+
+
